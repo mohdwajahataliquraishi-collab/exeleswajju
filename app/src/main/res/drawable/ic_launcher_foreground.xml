@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer gold accent ring -->
+    <path
+        android:strokeColor="#F59E0B"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000"
+        android:pathData="M 54, 25 A 29 29 0 1 0 54, 83 A 29 29 0 1 0 54, 25 Z" />
+
+    <!-- Spreadsheet mini-grid on left: 3x3 table with headers -->
+    <!-- Table background -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M 32, 36 L 50, 36 L 50, 42 L 32, 42 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 32, 42 L 50, 42 L 50, 68 L 32, 68 Z" />
+    <path
+        android:strokeColor="#0F172A"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:pathData="M 32, 36 L 50, 36 L 50, 68 L 32, 68 Z M 32, 42 L 50, 42 M 32, 50 L 50, 50 M 32, 59 L 50, 59 M 41, 36 L 41, 68" />
+
+    <!-- Excel letter E/X geometric mark -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 34.5, 38.5 L 38.5, 38.5 L 38.5, 40 L 36, 40 L 36, 41 L 38, 41 L 38, 42 L 34.5, 42 Z" />
+
+    <!-- Microphone & Voice Waves on right: Gold & Cyan -->
+    <!-- Mic body -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M 62, 40 C 62, 36.7 64.7, 34 68, 34 C 71.3, 34 74, 36.7 74, 40 L 74, 52 C 74, 55.3 71.3, 58 68, 58 C 64.7, 58 62, 55.3 62, 52 Z" />
+    <!-- Mic cradle -->
+    <path
+        android:strokeColor="#06B6D4"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 59, 49 C 59, 56.5 63, 62 68, 62 C 73, 62 77, 56.5 77, 49" />
+    <!-- Mic stem & base -->
+    <path
+        android:strokeColor="#06B6D4"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 68, 62 L 68, 69 M 62, 69 L 74, 69" />
+
+    <!-- Sound waves / audio ripples -->
+    <path
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 80, 44 C 82, 46.5 82, 49.5 80, 52 M 83.5, 41 C 86.5, 45 86.5, 51 83.5, 55" />
+</vector>

@@ -1,0 +1,6 @@
+{
+  "name": "EXELESWAJJU PRO",
+  "description": "Voice-first mobile Excel accounting application with dynamic accounting boxes, Hinglish voice assistant, live spreadsheet, design studio, and monthly screenshot gallery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
