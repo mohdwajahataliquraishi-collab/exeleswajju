@@ -1,0 +1,22 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+app/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+.env
+
+# Explicitly ensure Gradle Version Catalog and Wrapper are tracked by git
+!gradle/
+!gradle/libs.versions.toml
+!gradle/wrapper/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
+!.env.example
