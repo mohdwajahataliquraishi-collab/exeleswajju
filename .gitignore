@@ -20,3 +20,5 @@ local.properties
 !gradlew
 !gradlew.bat
 !.env.example
+!debug.keystore
+!debug.keystore.base64
