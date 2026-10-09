@@ -1,4 +1,5 @@
 import com.google.gms.googleservices.GoogleServicesPlugin.MissingGoogleServicesStrategy
+import java.util.Base64
 
 plugins {
   alias(libs.plugins.android.application)
@@ -6,6 +7,27 @@ plugins {
   alias(libs.plugins.google.devtools.ksp)
   alias(libs.plugins.secrets)
   alias(libs.plugins.google.services)
+}
+
+// Automatically ensure debug.keystore exists in both root and app/debug/ locations during build
+val rootDebugKeystore = file("${rootDir}/debug.keystore")
+val appDebugDir = file("${projectDir}/debug")
+val appDebugKeystore = file("${projectDir}/debug/debug.keystore")
+
+if (!rootDebugKeystore.exists()) {
+  val b64Keystore = file("${rootDir}/debug.keystore.base64")
+  if (b64Keystore.exists()) {
+    try {
+      val decoded = Base64.getDecoder().decode(b64Keystore.readText().replace("\\s+".toRegex(), ""))
+      rootDebugKeystore.writeBytes(decoded)
+    } catch (_: Exception) {}
+  }
+}
+if (rootDebugKeystore.exists()) {
+  try {
+    if (!appDebugDir.exists()) appDebugDir.mkdirs()
+    if (!appDebugKeystore.exists()) rootDebugKeystore.copyTo(appDebugKeystore, overwrite = true)
+  } catch (_: Exception) {}
 }
 
 android {

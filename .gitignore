@@ -22,3 +22,5 @@ local.properties
 !.env.example
 !debug.keystore
 !debug.keystore.base64
+!app/debug/
+!app/debug/debug.keystore
