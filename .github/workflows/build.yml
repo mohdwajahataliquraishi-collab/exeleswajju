@@ -2,16 +2,15 @@ name: Build Android APK
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,7 +22,7 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Grant Execute Permission for Gradlew
+      - name: Grant Execute Permission for Gradle
         run: chmod +x gradlew
 
       - name: Setup google-services.json
@@ -32,56 +31,57 @@ jobs:
             echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > app/google-services.json
           elif [ ! -f app/google-services.json ]; then
             cat << 'EOF' > app/google-services.json
-{
-  "project_info": {
-    "project_number": "123456789012",
-    "project_id": "exeleswajju-pro-app",
-    "storage_bucket": "exeleswajju-pro-app.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:abcdef0123456789abcdef",
-        "android_client_info": {
-          "package_name": "com.aistudio.exeleswajju.kxmp"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyMockApiKeyForBuildPurposes12345"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
-}
-EOF
+            {
+              "project_info": {
+                "project_number": "123456789012",
+                "project_id": "exeleswajju-pro-app",
+                "storage_bucket": "exeleswajju-pro-app.appspot.com"
+              },
+              "client": [
+                {
+                  "client_info": {
+                    "mobilesdk_app_id": "1:123456789012:android:abcdef0123456789abcdef",
+                    "android_client_info": {
+                      "package_name": "com.aistudio.exeleswajju.kxmp"
+                    }
+                  },
+                  "oauth_client": [],
+                  "api_key": [
+                    {
+                      "current_key": "AIzaSyMockApiKeyForBuildPurposes12345"
+                    }
+                  ],
+                  "services": {
+                    "analytics_service": {
+                      "status": "1"
+                    },
+                    "appinvite_service": {
+                      "status": "1",
+                      "other_platform_oauth_client": []
+                    },
+                    "ads_service": {
+                      "status": "2"
+                    }
+                  }
+                }
+              ],
+              "configuration_version": "1"
+            }
+            EOF
           fi
 
       - name: Generate and Position Debug Keystore
         run: |
-          if [ ! -f debug.keystore ] && [ ! -f app/debug.keystore ]; then
-            keytool -genkey -v -keystore debug.keystore \
-              -storepass android \
-              -alias androiddebugkey \
-              -keypass android \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 10000 \
-              -dname "CN=Android Debug,O=Android,C=US"
+          if [ ! -f debug.keystore ]; then
+            keytool -genkeyv -keystore debug.keystore \
+            -storepass android -alias androiddebugkey \
+            -keypass android -keyalg RSA -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug, O=Android, C=US"
           fi
           if [ -f debug.keystore ]; then
             cp debug.keystore app/debug.keystore
             mkdir -p app/debug && cp debug.keystore app/debug/debug.keystore
-          elif [ -f app/debug.keystore ]; then
-            cp app/debug.keystore debug.keystore
-            mkdir -p app/debug && cp app/debug.keystore app/debug/debug.keystore
           fi
 
       - name: Build with Gradle
@@ -92,3 +92,4 @@ EOF
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+          
