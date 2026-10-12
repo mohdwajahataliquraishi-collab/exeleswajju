@@ -30,8 +30,7 @@ jobs:
           if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
             echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > app/google-services.json
           elif [ ! -f app/google-services.json ]; then
-            cat << 'EOF' > app/google-services.json
-            {
+            echo '{
               "project_info": {
                 "project_number": "123456789012",
                 "project_id": "exeleswajju-pro-app",
@@ -66,14 +65,13 @@ jobs:
                 }
               ],
               "configuration_version": "1"
-            }
-            EOF
+            }' > app/google-services.json
           fi
 
       - name: Generate and Position Debug Keystore
         run: |
           if [ ! -f debug.keystore ]; then
-            keytool -genkeyv -keystore debug.keystore \
+            keytool -genkey -v -keystore debug.keystore \
             -storepass android -alias androiddebugkey \
             -keypass android -keyalg RSA -keysize 2048 \
             -validity 10000 \
@@ -92,4 +90,3 @@ jobs:
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
-          
