@@ -25,17 +25,63 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
-      - name: Ensure Debug Keystore
+      - name: Setup google-services.json
         run: |
-          mkdir -p app/debug
-          if [ ! -f debug.keystore ]; then
-            if [ -f debug.keystore.base64 ]; then
-              base64 -d debug.keystore.base64 > debug.keystore
-            else
-              keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-            fi
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > app/google-services.json
+          elif [ ! -f app/google-services.json ]; then
+            cat << 'EOF' > app/google-services.json
+{
+  "project_info": {
+    "project_number": "123456789012",
+    "project_id": "exeleswajju-pro-app",
+    "storage_bucket": "exeleswajju-pro-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789012:android:abcdef0123456789abcdef",
+        "android_client_info": {
+          "package_name": "com.aistudio.exeleswajju.kxmp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyMockApiKeyForBuildPurposes12345"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+EOF
           fi
-          cp debug.keystore app/debug/debug.keystore
+
+      - name: Generate and Position Debug Keystore
+        run: |
+          if [ ! -f debug.keystore ] && [ ! -f app/debug.keystore ]; then
+            keytool -genkey -v -keystore debug.keystore \
+              -storepass android \
+              -alias androiddebugkey \
+              -keypass android \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -dname "CN=Android Debug,O=Android,C=US"
+          fi
+          if [ -f debug.keystore ]; then
+            cp debug.keystore app/debug.keystore
+            mkdir -p app/debug && cp debug.keystore app/debug/debug.keystore
+          elif [ -f app/debug.keystore ]; then
+            cp app/debug.keystore debug.keystore
+            mkdir -p app/debug && cp app/debug.keystore app/debug/debug.keystore
+          fi
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace

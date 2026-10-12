@@ -9,8 +9,9 @@ plugins {
   alias(libs.plugins.google.services)
 }
 
-// Automatically ensure debug.keystore exists in both root and app/debug/ locations during build
+// Automatically ensure debug.keystore exists in root, app/debug.keystore, and app/debug/ locations during build
 val rootDebugKeystore = file("${rootDir}/debug.keystore")
+val appRootKeystore = file("${projectDir}/debug.keystore")
 val appDebugDir = file("${projectDir}/debug")
 val appDebugKeystore = file("${projectDir}/debug/debug.keystore")
 
@@ -25,8 +26,48 @@ if (!rootDebugKeystore.exists()) {
 }
 if (rootDebugKeystore.exists()) {
   try {
+    if (!appRootKeystore.exists()) rootDebugKeystore.copyTo(appRootKeystore, overwrite = true)
     if (!appDebugDir.exists()) appDebugDir.mkdirs()
     if (!appDebugKeystore.exists()) rootDebugKeystore.copyTo(appDebugKeystore, overwrite = true)
+  } catch (_: Exception) {}
+}
+
+// Automatically ensure mock google-services.json exists for CI builds if missing
+val googleServicesFile = file("${projectDir}/google-services.json")
+if (!googleServicesFile.exists()) {
+  try {
+    val mockGoogleServices = """
+    {
+      "project_info": {
+        "project_number": "123456789012",
+        "project_id": "exeleswajju-pro-app",
+        "storage_bucket": "exeleswajju-pro-app.appspot.com"
+      },
+      "client": [
+        {
+          "client_info": {
+            "mobilesdk_app_id": "1:123456789012:android:abcdef0123456789abcdef",
+            "android_client_info": {
+              "package_name": "com.aistudio.exeleswajju.kxmp"
+            }
+          },
+          "oauth_client": [],
+          "api_key": [
+            {
+              "current_key": "AIzaSyMockApiKeyForBuildPurposes12345"
+            }
+          ],
+          "services": {
+            "appinvite_service": {
+              "other_platform_oauth_client": []
+            }
+          }
+        }
+      ],
+      "configuration_version": "1"
+    }
+    """.trimIndent()
+    googleServicesFile.writeText(mockGoogleServices)
   } catch (_: Exception) {}
 }
 
